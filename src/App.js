@@ -5,6 +5,8 @@ import "./static/css/App.css";
 
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
+import Editable from "./components/Editable";
+
 
 // first we will make a new context
 const MyContext = React.createContext();
@@ -79,6 +81,85 @@ class Step extends Component {
   }
 }
 
+const isFieldEmpty = element => element.innerText.trim() === "";
+
+
+class Tutorial extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 0,
+      data: props.initialData || {}
+    };
+  }
+
+  nextStep = data => {
+    this.setState(state => ({
+      step: Math.min(state.step + 1, this.props.children.length - 1),
+      data: data // just data
+    }));
+  };
+
+  handleChange = (e) => {
+    console.log(e.target.value);
+  }
+
+
+  render() {
+    const { children } = this.props;
+    const { step, data } = this.state;
+    const activePage = React.Children.toArray(children)[step];
+
+    return (
+      <div>
+        <Header />
+        <main>
+        <div class="container">
+          <form>
+          <header>
+            <Editable maxLength={50}
+                      cols={3}
+                      row={1}
+                      width={200}
+                      placeHolder="Your name"
+                      onChange={this.handleChange}
+                      name="Name"
+                      style={{border: "1px solid red"}}
+            />
+
+            <Editable disabled maxLength={50}
+                      cols={3}
+                      row={1}
+                      width={200}
+                      placeholder="Your name"
+                      onChange={this.handleChange}
+                      name="Name"
+                      style={{border: "1px solid red"}}
+            />
+
+            <Editable maxLength={50}
+                      cols={3}
+                      row={1}
+                      width={200}
+                      placeHolder="Your name"
+                      onChange={this.handleChange}
+                      name="Name"
+                      style={{border: "1px solid red"}}
+            />
+          </header>
+          {activePage}
+          </form>
+        </div>
+        </main>
+        <Footer className="site-footer">
+            5 quick steps to Enhancv. First, type your name.
+            <button onClick={() => console.log("clicked next")}>Next</button>
+        </Footer>
+      </div>
+    );
+  }
+}
+
 const Home = () => (
   <div>
     <h2>Home</h2>
@@ -92,28 +173,17 @@ export class App extends Component {
     cool: true
   };
 
+  //<Route exact path="/" component={Home} />
+  // <Route path="/CV" component={CV} />
+
   render() {
     return (
       <Router>
         <MyProvider>
           <div className="flexbox-container">
-            <Header />
-            <main>
-              <div class="container">
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/CV">CV</Link>
-                  </li>
-                </ul>
-                bla?
-                <Route exact path="/" component={Home} />
-                <Route path="/CV" component={CV} />
-              </div>
-            </main>
-            <Footer className="site-footer">some text</Footer>
+
+            <Tutorial />
+
           </div>
         </MyProvider>
       </Router>

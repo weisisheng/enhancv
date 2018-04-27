@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { ProgressBar } from "./ProgressBar";
+import ProgressBar from "./ProgressBar";
 import { Button } from "./Button";
 
 import logo from "../static/images/logo.svg";
@@ -12,7 +12,7 @@ export class Header extends Component {
         <div className="site-logo">
           <img src={logo} alt="EnhanCV" />
         </div>
-        <ProgressBar />
+        <ProgressBar width={350} percent={50} />
         <Button className="button button-light" text="Sign in" />
       </div>
     );

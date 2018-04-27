@@ -1,0 +1,10 @@
+.editable {
+  resize: none;
+  white-space: nowrap;
+  overflow: hidden;
+  border: 1px solid gold
+}
+
+.editable:disabled {
+    background: var(--element-disabled)
+}
