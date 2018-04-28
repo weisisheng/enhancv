@@ -7,7 +7,6 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import Editable from "./components/Editable";
 
-
 // first we will make a new context
 const MyContext = React.createContext();
 // Then create a provider Component
@@ -36,7 +35,7 @@ class MyProvider extends Component {
   }
 }
 
-class CV extends Component {
+/* class CV extends Component {
   render() {
     return (
       <div>
@@ -58,7 +57,7 @@ class CV extends Component {
       </div>
     );
   }
-}
+}*/
 
 class Step extends Component {
   render() {
@@ -83,27 +82,26 @@ class Step extends Component {
 
 const isFieldEmpty = element => element.innerText.trim() === "";
 
-
 class Tutorial extends Component {
   constructor(props) {
     super(props);
     this.state = {
       step: 0,
-      data: props.initialData || {}
+      data: props.initialData || {},
+      continue: false
     };
   }
 
-  nextStep = data => {
+  goNextStep = data => {
     this.setState(state => ({
       step: Math.min(state.step + 1, this.props.children.length - 1),
       data: data // just data
     }));
   };
 
-  handleChange = (e) => {
+  handleChange = e => {
     console.log(e.target.value);
-  }
-
+  };
 
   render() {
     const { children } = this.props;
@@ -114,79 +112,124 @@ class Tutorial extends Component {
       <div>
         <Header />
         <main>
-        <div class="container">
-          <form>
-          <header>
-            <Editable maxLength={50}
-                      cols={3}
-                      row={1}
-                      width={200}
-                      placeHolder="Your name"
-                      onChange={this.handleChange}
-                      name="Name"
-                      style={{border: "1px solid red"}}
-            />
-
-            <Editable disabled maxLength={50}
-                      cols={3}
-                      row={1}
-                      width={200}
-                      placeholder="Your name"
-                      onChange={this.handleChange}
-                      name="Name"
-                      style={{border: "1px solid red"}}
-            />
-
-            <Editable maxLength={50}
-                      cols={3}
-                      row={1}
-                      width={200}
-                      placeHolder="Your name"
-                      onChange={this.handleChange}
-                      name="Name"
-                      style={{border: "1px solid red"}}
-            />
-          </header>
-          {activePage}
-          </form>
-        </div>
+          <div className="container">
+            <form>{activePage}</form>
+          </div>
         </main>
         <Footer className="site-footer">
-            5 quick steps to Enhancv. First, type your name.
-            <button onClick={() => console.log("clicked next")}>Next</button>
+          {this.state.continue && (
+            <button onClick={this.goNextStep}>Next</button>
+          )}
         </Footer>
       </div>
     );
   }
 }
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
+const CV = props => {
+  return (
+    <Editable
+      label="asdfa"
+      htmlId="candidate-name"
+      errorMessage="Write down your two names"
+      minLength={2}
+      maxLength={50}
+      cols={3}
+      row={1}
+      width={200}
+      placeholder="Your name"
+      name="Name"
+      style={{ border: "1px solid red" }}
+    />
+  );
+};
 
 export class App extends Component {
-  state = {
-    name: "nadin",
-    age: 100,
-    cool: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "nadin",
+      age: 100,
+      cool: true,
+      activeStep: 0
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.validate = this.validate.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+    console.log(this.state);
+  }
+
+  validate(e) {
+    console.log("validating");
+  }
 
   //<Route exact path="/" component={Home} />
   // <Route path="/CV" component={CV} />
 
   render() {
     return (
-      <Router>
-        <MyProvider>
-          <div className="flexbox-container">
+      // <Router>
+      //   <MyProvider>
+      //     <div className="flexbox-container">
+      //       <Tutorial>
+      //         <Editable
+      //           label="asdfa"
+      //           htmlId="candidate-name"
+      //           errorMessage="Write down your two names"
+      //           validate={this.validate}
+      //           minLength={2}
+      //           maxLength={50}
+      //           cols={3}
+      //           row={1}
+      //           width={200}
+      //           placeholder="Your name"
+      //           onChange={this.handleChange}
+      //           name="Name"
+      //           value={this.state.value}
+      //           style={{ border: "1px solid red" }}
+      //         />
 
-            <Tutorial />
+      //         <Editable
+      //           htmlId="candidate-position"
+      //           errorMessage="You should write a meaningful position"
+      //           validate={this.validate}
+      //           disabled
+      //           maxLength={50}
+      //           cols={3}
+      //           row={1}
+      //           width={200}
+      //           placeholder="Your name"
+      //           onChange={this.handleChange}
+      //           name="Position"
+      //           style={{ border: "1px solid red" }}
+      //         />
 
-          </div>
-        </MyProvider>
-      </Router>
+      //         <Editable
+      //           htmlId="candidate-asd"
+      //           maxLength={50}
+      //           cols={3}
+      //           row={1}
+      //           width={200}
+      //           placeholder="Your name"
+      //           onChange={this.handleChange}
+      //           name="Experience"
+      //           style={{ border: "1px solid red" }}
+      //         />
+      //       </Tutorial>
+      //     </div>
+      //   </MyProvider>
+      // </Router>
+      <div>
+        <CV activeStep={activeStep} />
+
+        <Footer activeStep={activeStep} />
+      </div>
     );
   }
 }

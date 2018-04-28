@@ -8,7 +8,7 @@ import logo from "../static/images/logo.svg";
 export class Header extends Component {
   render() {
     return (
-      <div class="site-head">
+      <div className="site-head">
         <div className="site-logo">
           <img src={logo} alt="EnhanCV" />
         </div>

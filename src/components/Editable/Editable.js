@@ -6,21 +6,31 @@ import Label from "../Label";
 import "./Editable.css";
 
 export default class Editable extends React.Component {
-  static propTypes = {};
-
-  static defaultProps = {};
-
   constructor(props) {
     super(props);
-    this.emitChange = this.emitChange.bind(this);
+
+    this.onBlur = this.onBlur.bind(this);
+  }
+  onFocus(e) {
+    console.log("OnFocus");
   }
 
-  emitChange(e) {}
+  onBlur(e) {
+    console.log("Bill Blurr")
+    console.log(this.props);
+    if(this.props.validate) {
+      debugger;
+      this.props.validate()
+    }
+  }
 
   render() {
     const {
       width,
+      minLength,
+      maxLength,
       disabled,
+      errorMessage,
       children,
       htmlId,
       name,
@@ -41,16 +51,18 @@ export default class Editable extends React.Component {
         <textarea
           className="editable"
           disabled={disabled ? "disabled" : ""}
-          onInput={this.emitChange}
-          onBlur={this.emitChange}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
           onChange={onChange}
           name={name}
           placeholder={placeholder}
           {...props}
           style={{width}}
+          minLength={minLength}
+          maxLength={maxLength}
           rows={single ? 1 : rows}
         >
-          {placeholder || children}
+          {placeholder || value}
         </textarea>
       </div>
     );

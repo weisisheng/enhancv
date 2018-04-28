@@ -10,7 +10,7 @@ const Label = ({htmlFor, label}) => (
 // Support for "required"
 //  {required && <span style={{color: "red"}}> *</span>}
 
-Label.PropTypes = {
+Label.propTypes = {
     htmlFor: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     required: PropTypes.bool
